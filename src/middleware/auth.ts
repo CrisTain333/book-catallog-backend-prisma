@@ -6,7 +6,8 @@ import ApiError from '../error/ApiError';
 import { NextFunction, Response } from 'express';
 
 const auth =
-    () => async (req: any, res: Response, next: NextFunction) => {
+    (...requiredRoles: string[]) =>
+    async (req: any, res: Response, next: NextFunction) => {
         try {
             //get authorization token
             const token = req.headers.authorization;
@@ -20,7 +21,16 @@ const auth =
                 token,
                 config.jwt.secret as Secret
             );
+
             req.user = verifiedUser;
+
+            // role diye guard korar jnno
+            if (
+                requiredRoles.length &&
+                !requiredRoles.includes(verifiedUser.role)
+            ) {
+                throw new ApiError(403, 'Forbidden Access');
+            }
             next();
         } catch (error) {
             next(error);
