@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+
+model User {
+  id        String   @id @default(uuid())  
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("customer")
+  contactNo String
+  address   String
+  profileImg String
+  reviews   ReviewAndRating[]
+  orders    Order[]
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  title    String
+  books     Book[]
+}
+
+model Book {
+  id               String    @id @default(uuid())  // Using String type for UUID
+  title            String
+  author           String
+  price            Float
+  genre            String
+  publicationDate  DateTime
+  categoryId       String    // Using String type for UUID
+  category         Category  @relation(fields: [categoryId], references: [id])
+  reviews          ReviewAndRating[]
+}
+
+model ReviewAndRating {
+  id       String   @id @default(uuid()) @map("id") // Using String type for UUID
+  review   String
+  rating   Int
+  userId   String   // Using String type for UUID
+  bookId   String   // Using String type for UUID
+  user     User     @relation(fields: [userId], references: [id])
+  book     Book     @relation(fields: [bookId], references: [id])
+}
+
+model Order {
+  id           String     @id @default(uuid()) @map("id") // Using String type for UUID
+  userId       String     // Using String type for UUID
+  orderedBooks Json
+  status       String     @default("pending") @db.VarChar(20)
+  createdAt    DateTime   @default(now())
+  user         User       @relation(fields: [userId], references: [id])
+}
