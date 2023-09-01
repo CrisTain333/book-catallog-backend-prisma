@@ -1,7 +1,9 @@
 // import { JwtPayload } from 'jsonwebtoken';
-// import ApiError from '../../error/ApiError';
-// import { httpCode } from '../../shared/httpCodes';
+import { httpCode } from '../../shared/httpCodes';
+import ApiError from '../../error/ApiError';
 import { prisma } from '../../shared/prisma';
+import { IUser } from './interface';
+import { excludePassword } from '../../utils/helper/excludePassword';
 
 const getAllUsers = async () => {
     const Users = await prisma.user.findMany({
@@ -19,20 +21,59 @@ const getAllUsers = async () => {
     return Users;
 };
 
-// const getUser = async (user: JwtPayload): Promise<IUser | null> => {
-//     const { email } = user;
-//     const profile = await User.findOne({ email });
-//     if (!profile) {
-//         throw new ApiError(httpCode.NOT_FOUND, 'User not found');
-//     }
+const getSingleUser = async (id: string) => {
+    const User = await prisma.user.findUnique({
+        where: {
+            id
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            contactNo: true,
+            address: true,
+            role: true,
+            profileImg: true
+        }
+    });
 
-//     const userWithoutPassword = await User.findById(
-//         profile._id
-//     ).select('-password');
+    if (!User) {
+        throw new ApiError(httpCode.BAD_REQUEST, 'Invalid User ID');
+    }
+    return User;
+};
 
-//     return userWithoutPassword;
-// };
+const updateUser = async (id: string, data: Partial<IUser>) => {
+    const updatedUser = await prisma.user.update({
+        where: { id },
+        data: data
+    });
+
+    if (!updatedUser) {
+        throw new ApiError(httpCode.BAD_REQUEST, 'Invalid User ID');
+    }
+
+    const userWithoutPassword = excludePassword(updatedUser);
+    return userWithoutPassword;
+};
+
+const deleteUser = async (id: string) => {
+    const User = await prisma.user.delete({
+        where: {
+            id
+        }
+    });
+
+    if (!User) {
+        throw new ApiError(httpCode.BAD_REQUEST, 'Invalid User ID');
+    }
+
+    return User;
+};
 
 export const UserService = {
-    getAllUsers
+    getAllUsers,
+    getSingleUser,
+    updateUser,
+    deleteUser
 };
