@@ -13,7 +13,8 @@
         "lint:fix": "lint -- --fix",
         "prettier:check": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
         "prepare": "husky install",
-        "lint-prettier": "npm run lint:check && npm run prettier:check"
+        "lint-prettier": "npm run lint:check && npm run prettier:check",
+        "postinstall": "prisma generate"
     },
     "lint-staged": {
         "src/**/*.ts": "npm run lint-prettier"
