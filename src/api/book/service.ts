@@ -3,10 +3,7 @@ import { IBook } from './interface';
 
 const createBook = async (data: IBook) => {
     const result = await prisma.book.create({
-        data,
-        select: {
-            category: true
-        }
+        data
     });
 
     return result;
