@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import { JwtPayload } from 'jsonwebtoken';
 import { httpCode } from '../../shared/httpCodes';
 import ApiError from '../../error/ApiError';
