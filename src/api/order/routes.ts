@@ -13,4 +13,10 @@ router.post(
     OrderController.createOrder
 );
 
+router.get(
+    '/',
+    auth(UserRole.ADMIN, UserRole.CUSTOMER),
+    OrderController.getOrders
+);
+
 export const OrderRoute = router;
