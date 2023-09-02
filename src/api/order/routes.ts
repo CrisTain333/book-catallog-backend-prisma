@@ -14,6 +14,12 @@ router.post(
 );
 
 router.get(
+    '/:orderId',
+    auth(UserRole.ADMIN, UserRole.CUSTOMER),
+    OrderController.getSingleOrder
+);
+
+router.get(
     '/',
     auth(UserRole.ADMIN, UserRole.CUSTOMER),
     OrderController.getOrders
