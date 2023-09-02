@@ -38,9 +38,45 @@ const getBooksByCategory = catchAsync(
         });
     }
 );
+const getSingleBook = catchAsync(
+    async (req: Request, res: Response) => {
+        const id = req.params.id;
+        const result = await BookService.getSingleBook(id);
+        sendResponse(res, {
+            statusCode: 200,
+            success: true,
+            message: 'Book fetched successfully',
+            data: result
+        });
+    }
+);
+const updateBook = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const data = req.body;
+    const result = await BookService.updateBook(id, data);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Book updated successfully',
+        data: result
+    });
+});
+const deleteBook = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await BookService.deleteBook(id);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Book is deleted successfully',
+        data: result
+    });
+});
 
 export const BooksController = {
     createBook,
     getAllBook,
-    getBooksByCategory
+    getBooksByCategory,
+    getSingleBook,
+    updateBook,
+    deleteBook
 };

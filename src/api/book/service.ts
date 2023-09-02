@@ -139,8 +139,51 @@ const getBooksByCategory = async (
     };
 };
 
+const getSingleBook = async (id: string) => {
+    const result = await prisma.book.findUnique({
+        where: { id }
+    });
+
+    if (!result) {
+        throw new ApiError(httpCode.BAD_REQUEST, 'Book not found');
+    }
+    return result;
+};
+
+const updateBook = async (id: string, data: Partial<IBook>) => {
+    try {
+        const result = await prisma.book.update({
+            where: {
+                id: id
+            },
+            data
+        });
+
+        return result;
+    } catch (error) {
+        throw new ApiError(httpCode.BAD_REQUEST, 'Invalid Book Id');
+    }
+};
+
+const deleteBook = async (id: string) => {
+    try {
+        const result = await prisma.book.delete({
+            where: {
+                id: id
+            }
+        });
+
+        return result;
+    } catch (error) {
+        throw new ApiError(httpCode.BAD_REQUEST, 'Invalid Book Id');
+    }
+};
+
 export const BookService = {
     createBook,
     getAllBooks,
-    getBooksByCategory
+    getBooksByCategory,
+    getSingleBook,
+    updateBook,
+    deleteBook
 };

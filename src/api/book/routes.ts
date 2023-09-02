@@ -12,7 +12,22 @@ router.post(
     validateRequest(BookValidator.createBookSchema),
     BooksController.createBook
 );
-router.get('/:id/category', BooksController.getBooksByCategory);
+
+router.patch(
+    '/:id',
+    auth(UserRole.ADMIN),
+    validateRequest(BookValidator.updateBookZodSchema),
+    BooksController.updateBook
+);
+
+router.delete(
+    '/:id',
+    auth(UserRole.ADMIN),
+    BooksController.deleteBook
+);
+
 router.get('/', BooksController.getAllBook);
+router.get('/:id/category', BooksController.getBooksByCategory);
+router.get('/:id', BooksController.getSingleBook);
 
 export const BookRoute = router;
