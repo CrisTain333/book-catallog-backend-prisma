@@ -4,14 +4,15 @@ import auth from '../../middleware/auth';
 import { UserRole } from '../../enum/user';
 import validateRequest from '../../middleware/validateRequest';
 import { BookValidator } from './validation';
-const routes = express.Router();
+const router = express.Router();
 
-routes.post(
+router.post(
     '/create-book',
     auth(UserRole.ADMIN),
     validateRequest(BookValidator.createBookSchema),
     BooksController.createBook
 );
-routes.get('/', BooksController.getAllBook);
+router.get('/:id/category', BooksController.getBooksByCategory);
+router.get('/', BooksController.getAllBook);
 
-export const BookRoute = routes;
+export const BookRoute = router;

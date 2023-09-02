@@ -100,7 +100,47 @@ const getAllBooks = async (req: Request) => {
     }
 };
 
+const getBooksByCategory = async (
+    categoryId: string,
+    req: Request
+) => {
+    const { page = 1, size = 10 }: any = req.query;
+
+    const books = await prisma.book.findMany({
+        skip: (parseInt(page) - 1) * parseInt(size),
+        take: parseInt(size),
+        where: {
+            categoryId: categoryId
+                ? (categoryId as string)
+                : undefined
+        }
+    });
+
+    // Calculate total pages based on the total count and page size
+    const totalCount = await prisma.book.count({
+        where: {
+            categoryId: categoryId
+                ? (categoryId as string)
+                : undefined
+        }
+    });
+
+    const totalPage = Math.ceil(totalCount / parseInt(size));
+
+    // Return the result as JSON
+    return {
+        meta: {
+            page: parseInt(page),
+            size: parseInt(size),
+            total: totalCount,
+            totalPage
+        },
+        data: books
+    };
+};
+
 export const BookService = {
     createBook,
-    getAllBooks
+    getAllBooks,
+    getBooksByCategory
 };
