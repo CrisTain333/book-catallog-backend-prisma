@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from 'express';
 
 type IApiResponse<T> = {
@@ -5,11 +6,7 @@ type IApiResponse<T> = {
     success: boolean;
     message?: string | null;
     data?: T | null;
-    meta?: {
-        page: number;
-        limit: number;
-        total: number;
-    };
+    meta?: any;
 };
 
 const sendResponse = <T>(

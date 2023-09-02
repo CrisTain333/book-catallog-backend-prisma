@@ -14,6 +14,18 @@ const createBook = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getAllBook = catchAsync(async (req: Request, res: Response) => {
+    const result = await BookService.getAllBooks(req);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Book created successfully',
+        meta: result.meta,
+        data: result.data
+    });
+});
+
 export const BooksController = {
-    createBook
+    createBook,
+    getAllBook
 };

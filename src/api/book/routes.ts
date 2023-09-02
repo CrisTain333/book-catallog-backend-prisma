@@ -12,5 +12,6 @@ routes.post(
     validateRequest(BookValidator.createBookSchema),
     BooksController.createBook
 );
+routes.get('/', BooksController.getAllBook);
 
 export const BookRoute = routes;
