@@ -40,7 +40,7 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const loginData = __rest(req.body, []);
     const result = yield service_1.AuthService.login(loginData);
-    (0, sendResponse_1.default)(res, {
+    res.status(200).json({
         statusCode: 200,
         success: true,
         message: 'User login in successfully',

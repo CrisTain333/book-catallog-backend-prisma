@@ -18,7 +18,7 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     const { ...loginData } = req.body;
     const result = await AuthService.login(loginData);
 
-    sendResponse(res, {
+    res.status(200).json({
         statusCode: 200,
         success: true,
         message: 'User login in successfully',

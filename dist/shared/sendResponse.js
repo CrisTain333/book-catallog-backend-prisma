@@ -6,8 +6,7 @@ const sendResponse = (res, data) => {
         success: data === null || data === void 0 ? void 0 : data.success,
         message: (data === null || data === void 0 ? void 0 : data.message) || null,
         meta: (data === null || data === void 0 ? void 0 : data.meta) || null || undefined,
-        data: (data === null || data === void 0 ? void 0 : data.data) || null,
-        token: (data === null || data === void 0 ? void 0 : data.token) || null
+        data: (data === null || data === void 0 ? void 0 : data.data) || null
     };
     res.status(data === null || data === void 0 ? void 0 : data.statusCode).json(responseData);
 };
